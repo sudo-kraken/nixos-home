@@ -97,7 +97,6 @@ let
       deskflow # keyboard and mouse sharing app
 
       # app
-      keepassxc # password manager
       protonmail-desktop # email client for proton
       protonvpn-gui # vpn client for proton
       (discord.override { withVencord = true; }) # social media

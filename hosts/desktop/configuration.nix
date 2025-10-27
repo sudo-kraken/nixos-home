@@ -1,4 +1,5 @@
 { username, ... }:
+
 {
   imports = [
     ./hardware-configuration.nix
@@ -12,7 +13,6 @@
   mySystem = {
     game.enable = true;
     nvidia.enable = true;
-    };
   };
 
   home-manager.users.${username} = {
@@ -21,6 +21,7 @@
         "DP-1,3840x2160@120.00Hz,0x0,1"
         ",preferred,auto,auto"
       ];
+
       workspace = [
         "1,monitor:DP-1"
         "2,monitor:DP-1"

@@ -2,7 +2,7 @@
   description = "Joe Harrison Nix configuration";
 
   inputs = {
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -104,6 +104,7 @@
             ./hosts
             # Configuration unfree pour nixpkgs stable
             { nixpkgs.config.allowUnfreePredicate = allowUnfreePredicate; }
+            { nixpkgs.config.allowInsecurePredicate = pkg: pkg.pname == "qtwebengine"; }
           ];
         }
       );

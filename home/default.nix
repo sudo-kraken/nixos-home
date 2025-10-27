@@ -19,12 +19,21 @@ let
       "vscode-extension-MS-python-vscode-pylance"
       "discord"
       "spotify"
+      "slack"
+      "zoom-us"
+      "zoom"
+      "stremio"
+      "stremio-shell"
+      "stremio-server"
       "packer"
     ];
 
   pkgs-unstable = import inputs.nixpkgs-unstable {
     system = pkgs.system;
-    config.allowUnfreePredicate = allowUnfreePredicate;
+    config = {
+      allowUnfreePredicate = allowUnfreePredicate;
+      allowInsecurePredicate = pkg: pkg.pname == "qtwebengine";
+    };
   };
 in
 {

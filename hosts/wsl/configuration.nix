@@ -7,7 +7,6 @@
 {
   imports = [
     inputs.nixos-wsl.nixosModules.default
-    ../../system/ca-certificates.nix
     ../../system/internationalization.nix
     ../../system/nixsettings.nix
     ../../system/security.nix
