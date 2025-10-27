@@ -1,0 +1,24 @@
+{
+  imports = [
+    ./audio.nix
+    ./bluetooth.nix
+    ./boot.nix
+    ./cifs.nix
+    ./display-manager.nix
+    ./dns.nix
+    ./file.nix
+    ./fwupd.nix
+    ./game.nix
+    ./internationalization.nix
+    ./logind.nix
+    ./network.nix
+    ./nixsettings.nix
+    ./nvidia.nix
+    ./printer.nix
+    ./security.nix
+    ./ssh.nix
+    ./user.nix
+    ./video.nix
+    ./virtualization.nix
+  ];
+}
