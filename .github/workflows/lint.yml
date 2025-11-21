@@ -19,7 +19,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Install nix
-        uses: cachix/install-nix-action@02a151ada4993995686f9ed4f1be7cfbb229e56f # v31
+        uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31
       - name: Run flake check
         run: nix flake check
       - name: Run nix fmt
