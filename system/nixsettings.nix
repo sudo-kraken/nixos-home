@@ -1,14 +1,15 @@
 {
-  environment,
   pkgs,
   ...
 }:
 {
-  environment.systemPackages = [ pkgs.nixfmt-rfc-style ];
+  environment.systemPackages = [ pkgs.nixfmt ];
 
   documentation.nixos.enable = false;
 
   nix = {
+    package = pkgs.lixPackageSets.stable.lix;
+
     settings = {
       experimental-features = [
         "nix-command"

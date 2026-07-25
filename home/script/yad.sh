@@ -11,17 +11,17 @@ yad \
 --column=Key: \
 --column=Description: \
 --timeout=90 \
---timeout-indicat \
+--timeout-indicator=bottom \
 " + Q" "Terminal" \
 " + C" "Kill active" \
 " + K" "Force Kill active" \
 " + L" "Lock" \
 " + E" "File Manager" \
-" + V" "Toogle floating" \
+" + V" "Toggle floating" \
 " + R" "App menu" \
 " + P" "Pseudo dwindle" \
-" + J" "Toogle split" \
-" + I" "Hyprexpo" \
+" + J" "Toggle split" \
+" + I" "Workspace overview" \
 "PRINT" "Screenshot a region" \
 " + <Direction arrow>" "Move focus" \
 " + SHIFT + <Direction arrow>" "Move window" \

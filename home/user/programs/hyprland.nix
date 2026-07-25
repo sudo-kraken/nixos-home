@@ -2,20 +2,20 @@
 {
   wayland.windowManager.hyprland = {
     enable = true;
+    configType = "hyprlang";
     plugins = with pkgs.hyprlandPlugins; [
-      hyprexpo
+      hyprspace
     ];
     systemd.variables = [ "--all" ];
     settings = {
       source = "~/.config/hypr/macchiato.conf";
 
       exec-once = [
-        "/usr/lib/polkit-kde-authentication-agent-1"
         "${pkgs.hyprpaper}/bin/hyprpaper" # wallpaper utility
         "${pkgs.hypridle}/bin/hypridle" # idle daemon
         "[workspace 9 silent] keepassxc"
         "[workspace 9 silent] discord"
-        "[workspace 0 silent] firefox"
+        "[workspace 10 silent] firefox"
       ];
 
       general = {
@@ -78,10 +78,6 @@
         };
       };
 
-      gestures = {
-        workspace_swipe = false;
-      };
-
       device = {
         name = "mouse";
         sensitivity = -0.5;
@@ -99,7 +95,7 @@
         "$mainMod, R, exec, ${pkgs.rofi}/bin/rofi -show drun"
         "$mainMod, P, pseudo,"
         "$mainMod, J, togglesplit,"
-        "$mainMod, I, hyprexpo:expo, toggle"
+        "$mainMod, I, overview:toggle"
         ", PRINT, exec, ${pkgs.hyprshot}/bin/hyprshot -m region -o $HOME/Pictures"
         "$mainMod, left, movefocus, l"
         "$mainMod, right, movefocus, r"
@@ -119,7 +115,7 @@
         "$mainMod, egrave, workspace, 7"
         "$mainMod, underscore, workspace, 8"
         "$mainMod, ccedilla, workspace, 9"
-        "$mainMod, agrave, workspace, 0"
+        "$mainMod, agrave, workspace, 10"
         "$mainMod SHIFT, ampersand, movetoworkspace, 1"
         "$mainMod SHIFT, eacute, movetoworkspace, 2"
         "$mainMod SHIFT, quotedbl, movetoworkspace, 3"
@@ -130,7 +126,7 @@
         "$mainMod SHIFT, underscore, movetoworkspace, 8"
         "$mainMod SHIFT, ccedilla, movetoworkspace, 9"
         "$mainMod SHIFT, agrave, movetoworkspace, 10"
-        "$mainMod SHIFT, S, movetoworkspace, special"
+        "$mainMod SHIFT, S, movetoworkspace, special:1"
         "$mainMod, tab, workspace, e+1"
       ];
 
@@ -139,17 +135,14 @@
         ", switch:off:Lid Switch, exec, hyprctl dispatch dpms on"
       ];
 
-      windowrulev2 = [
-        "suppressevent maximize, class:.*"
+      windowrule = [
+        "match:class .*, suppress_event maximize"
       ];
 
       plugin = {
-        hyprexpo = {
-          columns = 3;
-          gap_size = 5;
-          bg_col = "rgb(111111)";
-          workspace_method = "first 1";
-          enable_gesture = false;
+        overview = {
+          disableGestures = true;
+          workspaceMargin = 5;
         };
       };
     };

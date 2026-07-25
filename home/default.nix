@@ -3,7 +3,6 @@
   pkgs,
   config,
   lib,
-  home-manager-unstable,
   username,
   ...
 }:
@@ -22,17 +21,17 @@ let
       "slack"
       "zoom-us"
       "zoom"
-      "stremio"
-      "stremio-shell"
-      "stremio-server"
+      "stremio-linux-shell"
       "packer"
     ];
 
   pkgs-unstable = import inputs.nixpkgs-unstable {
-    system = pkgs.system;
+    system = pkgs.stdenv.hostPlatform.system;
     config = {
       allowUnfreePredicate = allowUnfreePredicate;
-      allowInsecurePredicate = pkg: pkg.pname == "qtwebengine";
+      # Joplin and Proton Mail have not yet moved off Electron 39. Keep this
+      # exact so a lock update cannot silently permit a different EOL version.
+      permittedInsecurePackages = [ "electron-39.8.10" ];
     };
   };
 in
@@ -52,14 +51,16 @@ in
   config = {
     # trippy does not support native unprivileged mode https://github.com/fujiapple852/trippy/issues/741
     security.wrappers.trip = {
-      owner = username;
+      owner = "root";
       group = username;
+      permissions = "u+rx,g+rx,o-rwx";
       capabilities = "cap_net_raw+p";
       source = "${pkgs-unstable.trippy}/bin/trip";
     };
 
     home-manager = {
       backupFileExtension = "backup";
+      useGlobalPkgs = true;
       useUserPackages = true;
 
       extraSpecialArgs = {
@@ -76,8 +77,6 @@ in
 
       users.${username} = {
         imports = [
-          (inputs.home-manager-unstable + "/modules/programs/hwatch.nix")
-          (inputs.home-manager-unstable + "/modules/programs/kubeswitch.nix")
           ./user
         ];
 

@@ -1,8 +1,7 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 {
   home.packages = with pkgs; [
     coreutils
-    wslu
     socat
   ];
 
@@ -14,28 +13,22 @@
       WantedBy = [ "default.target" ];
     };
     Service = {
-      Environment = [
-        "PATH=${
-          lib.makeBinPath [
-            pkgs.wslu
-            pkgs.coreutils
-            pkgs.gnused
-            pkgs.gnugrep
-            pkgs.bash
-          ]
-        }"
-      ];
       ExecStartPre = [
         "${pkgs.coreutils}/bin/mkdir -p /mnt/wsl"
         "${pkgs.coreutils}/bin/rm -f /mnt/wsl/ssh-agent.sock"
       ];
       ExecStart = "${pkgs.writeShellScript "ssh-agent-proxy" ''
-        set -x  # Enable debug output
+        set -e
 
-        # Get Windows username using wslvar
-        WIN_USER="$("${pkgs.wslu}/bin/wslvar" USERNAME 2>/dev/null || echo $USER)"
+        # Query the Windows username without the discontinued wslu package.
+        WIN_USER="$(
+          /mnt/c/Windows/System32/cmd.exe /D /C "echo %USERNAME%" 2>/dev/null \
+            | ${pkgs.coreutils}/bin/tr -d '\r'
+        )"
+        if [ -z "$WIN_USER" ]; then
+          WIN_USER="$USER"
+        fi
 
-        # Check common npiperelay locations
         NPIPE_PATHS=(
           "/mnt/c/Users/$WIN_USER/AppData/Local/Microsoft/WinGet/Links/npiperelay.exe"
           "/mnt/c/ProgramData/chocolatey/bin/npiperelay.exe"
@@ -44,7 +37,6 @@
 
         NPIPE_PATH=""
         for path in "''${NPIPE_PATHS[@]}"; do
-          echo "Checking npiperelay at: $path"
           if [ -f "$path" ]; then
             NPIPE_PATH="$path"
             break
@@ -52,13 +44,11 @@
         done
 
         if [ -z "$NPIPE_PATH" ]; then
-          echo "npiperelay.exe not found in expected locations!"
+          echo "npiperelay.exe not found in expected locations" >&2
           exit 1
         fi
 
-        echo "Using npiperelay from: $NPIPE_PATH"
-
-        exec ${pkgs.socat}/bin/socat -d UNIX-LISTEN:/mnt/wsl/ssh-agent.sock,fork,mode=600 \
+        exec ${pkgs.socat}/bin/socat UNIX-LISTEN:/mnt/wsl/ssh-agent.sock,fork,mode=600 \
           EXEC:"$NPIPE_PATH -ei -s //./pipe/openssh-ssh-agent",nofork
       ''}";
       Type = "simple";

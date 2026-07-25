@@ -2,28 +2,17 @@
   description = "Joe Harrison Nix configuration";
 
   inputs = {
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
-    nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
-
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-
-    lix-module = {
-      url = "git+https://git.lix.systems/lix-project/nixos-module?ref=2.93.3-2";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
-    };
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    systems.url = "github:nix-systems/default";
 
     home-manager-stable = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs-stable";
-    };
-
-    home-manager-unstable = {
-      url = "github:nix-community/home-manager/master";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     lanzaboote = {
-      url = "github:nix-community/lanzaboote/v0.4.2";
+      url = "github:nix-community/lanzaboote/v1.1.0";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
@@ -33,7 +22,7 @@
     };
 
     nixos-wsl = {
-      url = "github:nix-community/NixOS-WSL/main";
+      url = "github:nix-community/NixOS-WSL/2605.7.2";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
@@ -78,10 +67,10 @@
         ];
     in
     {
-      formatter = eachSystem (pkgs: treefmtEval.${pkgs.system}.config.build.wrapper);
+      formatter = eachSystem (pkgs: treefmtEval.${pkgs.stdenv.hostPlatform.system}.config.build.wrapper);
 
       checks = eachSystem (pkgs: {
-        formatting = treefmtEval.${pkgs.system}.config.build.check self;
+        formatting = treefmtEval.${pkgs.stdenv.hostPlatform.system}.config.build.check self;
       });
 
       nixosConfigurations = lib.genAttrs hostNames (
@@ -94,7 +83,7 @@
               username
               inputs
               ;
-            # pkgs-unstable avec la configuration unfree
+            # Unstable packages with the same restricted unfree policy.
             pkgs-unstable = import nixpkgs-unstable {
               inherit system;
               config.allowUnfreePredicate = allowUnfreePredicate;
@@ -102,9 +91,14 @@
           };
           modules = [
             ./hosts
-            # Configuration unfree pour nixpkgs stable
-            { nixpkgs.config.allowUnfreePredicate = allowUnfreePredicate; }
-            { nixpkgs.config.allowInsecurePredicate = pkg: pkg.pname == "qtwebengine"; }
+            {
+              nixpkgs.config = {
+                # Restricted unfree policy for stable packages.
+                allowUnfreePredicate = allowUnfreePredicate;
+                # Heroic 2.20 is pinned to Electron 39 upstream.
+                permittedInsecurePackages = [ "electron-39.8.10" ];
+              };
+            }
           ];
         }
       );

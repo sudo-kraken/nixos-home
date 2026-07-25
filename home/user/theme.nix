@@ -1,4 +1,9 @@
-{ pkgs, username, ... }:
+{
+  config,
+  pkgs,
+  username,
+  ...
+}:
 {
   home.pointerCursor = {
     gtk.enable = true;
@@ -20,11 +25,12 @@
   qt = {
     enable = true;
     style.name = "adwaita-dark";
-    platformTheme.name = "qt6ct";
+    platformTheme.name = "qtct";
   };
 
   gtk = {
     enable = true;
+    gtk4.theme = config.gtk.theme;
 
     theme = {
       name = "Orchis-Dark-Compact";
