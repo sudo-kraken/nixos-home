@@ -20,7 +20,7 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       steam-run
-      protonup
+      protonup-ng
       mangohud # monitoring FPS, temperatures, CPU/GPU load and more
       heroic # epic, gog games
       pkgs-unstable.ankama-launcher # game launcher

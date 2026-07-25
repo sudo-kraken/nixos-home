@@ -9,6 +9,8 @@
   ];
 
   boot.supportedFilesystems = [ "btrfs" ];
+  security.sudo.wheelNeedsPassword = true;
+  users.users.${username}.hashedPasswordFile = "/etc/nixos/secrets/${username}-password-hash";
 
   mySystem = {
     game.enable = true;

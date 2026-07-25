@@ -5,7 +5,6 @@
   };
 
   environment.systemPackages = with pkgs; [
-    podman-compose
     qemu
     spice
     spice-gtk
@@ -13,7 +12,7 @@
     virt-manager
     virt-viewer
     win-spice
-    win-virtio
+    virtio-win
   ];
 
   virtualisation = {
@@ -22,19 +21,7 @@
     libvirtd = {
       enable = true;
 
-      qemu = {
-        swtpm.enable = true;
-        ovmf.enable = true;
-        ovmf.packages = [ pkgs.OVMFFull.fd ];
-      };
-    };
-
-    podman = {
-      enable = true;
-
-      dockerSocket.enable = true;
-      dockerCompat = true;
-      defaultNetwork.settings.dns_enabled = true;
+      qemu.swtpm.enable = true;
     };
   };
 }

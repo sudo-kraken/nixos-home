@@ -1,10 +1,9 @@
 { pkgs-unstable, ... }:
 {
-  imports = [ ./../../modules/trippy.nix ];
-
   programs.trippy = {
     enable = true;
     package = pkgs-unstable.trippy;
+    forceUserConfig = false;
     settings = {
       tui = {
         tui-locale = "en";

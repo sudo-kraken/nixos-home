@@ -10,6 +10,7 @@ let
   ];
 
   guiImports = [
+    ./hyprpolkitagent.nix
     ./kdeconnect.nix
   ];
 

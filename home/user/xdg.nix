@@ -1,6 +1,6 @@
 let
   browser = "firefox.desktop";
-  editor = "vscode.desktop";
+  editor = "code.desktop";
   telegram = "org.telegram.desktop.desktop";
   image = "imv.desktop";
 in
@@ -8,7 +8,10 @@ in
   xdg.configFile."mimeapps.list".force = true;
 
   xdg = {
-    userDirs.enable = true;
+    userDirs = {
+      enable = true;
+      setSessionVariables = true;
+    };
     mimeApps = {
       enable = true;
       defaultApplications = {

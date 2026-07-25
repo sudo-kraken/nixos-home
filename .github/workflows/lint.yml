@@ -5,11 +5,16 @@ on:
   - push
   - pull_request
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions: {}
 jobs:
   lint:
     name: Lint
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     permissions:
       contents: read
       pull-requests: read
@@ -21,6 +26,10 @@ jobs:
       - name: Install nix
         uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 # v31
       - name: Run flake check
-        run: nix flake check
-      - name: Run nix fmt
-        run: nix fmt
+        run: nix flake check --no-update-lock-file --print-build-logs
+      - name: Evaluate NixOS hosts
+        run: |
+          nix eval --raw --no-update-lock-file .#nixosConfigurations.desktop.config.system.build.toplevel.drvPath
+          nix eval --raw --no-update-lock-file .#nixosConfigurations.wsl.config.system.build.toplevel.drvPath
+      - name: Verify clean checkout
+        run: git diff --exit-code

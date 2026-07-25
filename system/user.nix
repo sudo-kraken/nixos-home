@@ -7,7 +7,6 @@
   users.groups.${username} = { };
   users.users.${username} = {
     isNormalUser = true;
-    initialPassword = "temp123";
     group = username;
     shell = pkgs.zsh;
     extraGroups = [ "wheel" ];

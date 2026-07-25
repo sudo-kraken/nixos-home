@@ -3,6 +3,7 @@
   programs.firefox = {
     enable = true;
     package = pkgs-unstable.firefox;
+    configPath = ".mozilla/firefox";
     languagePacks = [
       "fr"
       "en-US"

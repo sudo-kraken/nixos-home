@@ -159,7 +159,7 @@
 
       theme = {
         font = {
-          name = "Ubuntu Nerd Font";
+          name = "JetBrainsMono Nerd Font";
           size = "1.0rem";
         };
         bar = {

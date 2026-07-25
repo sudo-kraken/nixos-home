@@ -3,6 +3,7 @@
     ./audio.nix
     ./bluetooth.nix
     ./boot.nix
+    ./container.nix
     ./display-manager.nix
     ./dns.nix
     ./file.nix

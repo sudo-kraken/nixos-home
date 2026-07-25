@@ -1,7 +1,6 @@
 { pkgs, ... }:
 {
   security = {
-    sudo.wheelNeedsPassword = false;
     apparmor = {
       enable = true;
       packages = with pkgs; [
@@ -14,8 +13,8 @@
       extraConfig = ''
         /* Log authorization checks. */
         polkit.addRule(function(action, subject) {
-          polkit.log("user " +  subject.user + " is attempting action " + action.id + " from PID " + subject.pid);
-        });       
+          polkit.log("user " + subject.user + " is attempting action " + action.id + " from PID " + subject.pid);
+        });
       '';
     };
   };
